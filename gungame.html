@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian Roulette Game</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+            transition: background-color 0.5s;
+            font-size: larger;
+            font-weight: 500;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+        
+        .restart-button {
+            padding: 15px 15px;
+            font-size: 20px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            padding: auto;
+        }
+
+         .restart-button:hover {
+            background-color: #6b0e0e;
+        }
+        .restart-button:active {
+            background-color:  #6b0e0e;
+        }
+
+        .trigger-button {
+            padding: 15px 30px;
+            font-size: 35px;
+            background-color: #f83e3e;
+            color: #000000;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 700;
+            
+        }
+
+        .trigger-button:hover {
+            background-color: #6b0e0e;
+        }
+        .trigger-button:active {
+            background-color:  #6b0e0e;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        #rounds, #triggers {
+            margin: 15px 0;
+            font-size: 20px;
+        }
+
+        #rules {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #restart {
+            display: none; /* Hide restart button initially */
+        }
+    </style>
+</head>
+<body>
+
+    <h1> RUSSIAN ROULETTE</h1>
+    <div id="gun">
+        <div class="bullet" id="bullet"></div>
+    </div>
+    <div id="rounds">Rounds Left: 6</div>
+    <div id="triggers">Triggers Pulled: 0</div>
+    <button class="trigger-button" id="triggerButton" onclick="playGame()">Pull the Trigger</button>
+    <div id="result"></div>
+
+    <div  id="rules">
+        <h2>Rules:</h2>
+        <p>1. There are 6 chambers in the gun.</p>
+        <p>2. Only one chamber has a bullet.</p>
+        <p>3. You will pull the trigger up to 6 times.</p>
+        <p>4. If the chamber with the bullet is fired, you lose!</p>
+        <p>5. If it's empty, you survive!</p>
+    </div>
+
+    <button class="restart-button" id="restart" onclick="restartGame()">Restart Game</button>
+
+    <script>
+        // Game variables
+        let chambers = 6;
+        let bulletPosition = Math.floor(Math.random() * chambers); // Random bullet position
+        let roundsLeft = chambers;
+        let triggersPulled = 0;
+
+        function playGame() {
+            
+
+            // Check if the player got shot
+            if (roundsLeft > 0) {
+                triggersPulled++;
+
+
+                // Check if the player got shot
+                if (triggersPulled - 1 === bulletPosition) { // -1 to account for zero indexing
+                    bullet.style.backgroundColor = 'red'; // Change bullet color to indicate it's fired
+                    document.getElementById('result').textContent = "BANG! You're dead!";
+                    document.querySelector('button#triggerButton').style.display = 'none'; // Hide trigger button
+                    document.body.style.backgroundColor = 'red'; // Change background color
+                    document.getElementById('restart').style.display = 'block'; // Show restart button
+                } else {
+                    bullet.style.display = 'none'; // Hide bullet if no shot
+                    document.getElementById('result').textContent = "Click! You're safe!";
+                }
+
+                // Update counters
+                roundsLeft--;
+
+                // Update display
+                document.getElementById('triggers').textContent = `Triggers Pulled: ${triggersPulled}`;
+                document.getElementById('rounds').textContent = `Rounds Left: ${roundsLeft}`;
+            } else {
+                document.getElementById('result').textContent = "Game Over! No more rounds left.";
+                document.querySelector('button#triggerButton').style.display = 'none'; // Hide trigger button
+                document.body.style.backgroundColor = 'red'; // Change background color
+                document.getElementById('restart').style.display = 'block'; // Show restart button
+            }
+        }
+
+        function restartGame() {
+            // Reset game variables
+            bulletPosition = Math.floor(Math.random() * chambers); // New random bullet position
+            roundsLeft = chambers;
+            triggersPulled = 0;
+            document.getElementById('bullet').style.display = 'none'; // Hide bullet
+            document.getElementById('result').textContent = ""; // Clear result message
+            document.getElementById('triggers').textContent = `Triggers Pulled: ${triggersPulled}`;
+            document.getElementById('rounds').textContent = `Rounds Left: ${roundsLeft}`;
+            document.querySelector('button#triggerButton').style.display = 'inline-block'; // Show trigger button
+            document.body.style.backgroundColor = '#222'; // Reset background color
+            document.getElementById('restart').style.display = 'none'; // Hide restart button
+        }
+    </script>
+</body>
+</html>
